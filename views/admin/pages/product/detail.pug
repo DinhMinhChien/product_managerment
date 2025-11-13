@@ -1,43 +1,45 @@
 extends ../../layouts/default.pug
 
 block main 
+    .card.mb-3 
+        .card-header
+        .card-body 
+            if(product.title)
+                h1(class="mb-4 product-title") #{product.title}
 
-    if(product.title)
-        h1(class="mb-4 product-title") #{product.title}
+            if(product.price)
+                div(class="mb-4 product-price") Giá : <b>#{product.price}$</b>
 
-    if(product.price)
-        div(class="mb-4 product-price") Giá : <b>#{product.price}$</b>
+            if(product.discountPercentage)
+                div(class="mb-4 product-discount") Giảm giá: <b>#{product.discountPercentage}</b>
+            
+            if(product.stock)
+                div(class="mb-4 product-stock") Số lượng còn lại : <b>#{product.stock}</b>
+            
+            if(product.thumbnail)
+                div(class="mb-4 product-thumbnail")
+                    img(
+                        src=product.thumbnail 
+                        style="width: 100px"
+                    )
+            
+            if(product.status)
+                div(class="mb-4 product-status")
+                    span Trạng thái : 
+                    if(product.status === "active")
+                        span(class="badge text-bg-success text-decoration-none") Hoạt động
+                    else 
+                        span(class="badge text-bg-danger text-decoration-none") Dừng hoạt động
+            
+            if(product.position)
+                div(class="mb-4 product-position") Vị trí : <b>#{product.position}</b>
+            
+            if(product.description)
+                div(class="mb-4 product-desc") #{product.description}
 
-    if(product.discountPercentage)
-        div(class="mb-4 product-discount") Giảm giá: <b>#{product.discountPercentage}</b>
-    
-    if(product.stock)
-        div(class="mb-4 product-stock") Số lượng còn lại : <b>#{product.stock}</b>
-    
-    if(product.thumbnail)
-        div(class="mb-4 product-thumbnail")
-            img(
-                src=product.thumbnail 
-                style="width: 100px"
-            )
-    
-    if(product.status)
-        div(class="mb-4 product-status")
-            span Trạng thái : 
-            if(product.status === "active")
-                span(class="badge text-bg-success text-decoration-none") Hoạt động
-            else 
-                span(class="badge text-bg-danger text-decoration-none") Dừng hoạt động
-    
-    if(product.position)
-        div(class="mb-4 product-position") Vị trí : <b>#{product.position}</b>
-    
-    if(product.description)
-        div(class="mb-4 product-desc") #{product.description}
-
-    a(
-        href=`${prefixAdmin}/products/edit/${product.id}`
-        class="btn btn-warning"
-    ) Chỉnh sửa
+            a(
+                href=`${prefixAdmin}/products/edit/${product.id}`
+                class="btn btn-warning"
+            ) Chỉnh sửa
 
     script(src="/admin/js/product.js")
