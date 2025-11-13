@@ -8,7 +8,9 @@ html
     body 
         include ../partials/header.pug
         .body
+
             include ../partials/sider.pug
+            
             .main 
                 block main 
         
@@ -16,7 +18,12 @@ html
         script(src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js")
         script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.min.js")
         
-        //- script(src="/js/script.js")
+        //- tinymce
+        script(src="https://cdn.jsdelivr.net/npm/tinymce@6/tinymce.min.js")
+                
+        script(src="/admin/js/tinymce-config.js")
+        //- end tinymce
+        
         script(src="/admin/js/script.js") 
 
 

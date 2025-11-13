@@ -22,7 +22,8 @@ route.post(
     upload.single("thumbnail"),
     uploadCloud.upload,
     validate.createPost, 
-    controller.createPost)
+    controller.createPost
+)
 
 route.get("/edit/:id",controller.edit)
 route.patch(
