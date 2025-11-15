@@ -6,6 +6,7 @@ const uploadCloud = require("../../middlewares/admin/uploadCloud-middleware")
 const route = express.Router();
 const controller = require("../../controllers/admin/product-controller")
 const validate = require("../../validates/admin/product-validate")
+
 route.get('/',controller.product)
 
 route.patch('/change-status/:status/:id',controller.changeStatus)

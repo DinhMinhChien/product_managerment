@@ -9,7 +9,7 @@ block main
             h1(class="mb-4") Chỉnh sửa sản phẩm 
 
             form(
-                action=`${prefixAdmin}/products/edit/${product.id}?_method=PATCH`
+                action=`${prefixAdmin}/products-category/edit/${record.id}?_method=PATCH`
                 id="form-edit-product"
                 method="POST"
                 enctype="multipart/form-data"
@@ -21,7 +21,7 @@ block main
                         class="form-control"
                         id="title"
                         name="title"
-                        value=product.title
+                        value=record.title
                     )
                 div(class="form-group")
                     label(for="desc") Mô tả
@@ -30,38 +30,7 @@ block main
                         id="desc"
                         name="description"
                         rows="5"
-                    ) #{product.description} 
-                div(class="form-group")
-                    label(for="price") Giá
-                    input(
-                        type="number"
-                        class="form-control"
-                        id="price"
-                        name="price"
-                        value=product.price
-                        min="0"
-                        step="0.01"
-                    )
-                div(class="form-group")
-                    label(for="discount") Giảm giá( % )
-                    input(
-                        type="number"
-                        class="form-control"
-                        id="discount"
-                        name="discountPercentage"
-                        value=product.discountPercentage
-                        min="0"
-                        step="0.01"
-                    )
-                div(class="form-group")
-                    label(for="stock")  Số lượng
-                    input(
-                        type="number"
-                        class="form-control"
-                        id="stock"
-                        name="stock"
-                        value=product.stock
-                    )  
+                    ) #{record.description} 
                     
                 div(class="form-group" upload-image)
                     label(for="thumbnail" class="d-block") Ảnh
@@ -75,7 +44,7 @@ block main
                     )
                     div(class="d-flex align-items-center gap-2 mt-2")
                         img(
-                            src=product.thumbnail
+                            src=record.thumbnail
                             upload-image-preview
                             class="image-preview d-block"
                         )
@@ -83,7 +52,6 @@ block main
                             class="btn btn-danger btn-sm"
                             upload-image-clear
                         ) X
-
 
                 div(class="form-group")
                     label(for="position")  Vị trí
@@ -94,7 +62,7 @@ block main
                         name="position"
                         placeholder="Tự động tăng"
                         min="1"
-                        value=product.position
+                        value=record.position
                     )   
                 div(class="form-group form-check form-check-inline")
                     input(
@@ -103,7 +71,7 @@ block main
                         id="statusActive"
                         name="status"
                         value="active"
-                        checked = (product.status == "active" ? true : false)
+                        checked = (record.status == "active" ? true : false)
                     )
                     label(for="statusActive" class="form-check-label") Hoạt động
                 div(class="form-group form-check form-check-inline")
@@ -113,7 +81,7 @@ block main
                         id="statusInActive"
                         name="status"
                         value="inactive"
-                        checked = (product.status == "inactive" ? true : false)
+                        checked = (record.status == "inactive" ? true : false)
                     )
                     label(for="statusInActive" class="form-check-label") Dừng hoạt động    
                 div(class="form-group")
@@ -121,6 +89,5 @@ block main
                         type="submit"
                         class="btn btn-primary"
                     ) Cập nhật
-
 
     script(src="/admin/js/products.js") 

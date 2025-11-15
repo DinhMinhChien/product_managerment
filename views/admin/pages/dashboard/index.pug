@@ -1,4 +1,134 @@
 extends ../../layouts/default.pug
 
-block main 
-    h1 Trang tổng quan
+block main
+    head
+        meta(charset="utf-8")
+        meta(name="viewport" content="width=device-width, initial-scale=1")
+        title Admin Dashboard
+            .kpi-card { border-radius: 12px; box-shadow: 0 6px 18px rgba(0,0,0,0.04); }
+            .small-muted { font-size: .85rem; color: #6c757d; }
+            .low-stock { color: #c41e1e; font-weight: 600; }
+            .activity-item { font-size: .95rem; }
+    body
+        .container-fluid.p-4
+            .row.mb-3
+                .col-8
+                    h1.mb-0 Admin Dashboard
+                    p.small-muted.mt-1 Trang tổng quan quản trị cửa hàng
+            .row.g-3
+                each val, index in ['Tổng đơn hàng', 'Doanh thu (tháng)', 'Khách hàng', 'Sản phẩm']
+                    .col-12.col-md-3
+                        .card.kpi-card.p-3
+                            .d-flex.justify-content-between.align-items-center
+                            .me-3
+                                h6.mb-1= val
+                                h4.mb-0 0
+                                p.small-muted.mb-0
+                                    | So với kỳ trước: 
+                                    span.text-success.ml-2 +0%
+                            i.bi.bi-graph-up-arrow(style="font-size: 28px")
+            .row.mt-4
+                .col-lg-8
+                    .card.mb-3
+                        .card-body
+                            h5.card-title Doanh thu theo thời gian
+                            canvas#revenueChart(width="400" height="150")
+                .col-lg-4
+                    .card.mb-3
+                        .card-body
+                            h5.card-title Tỉ lệ trạng thái đơn hàng
+                            canvas#statusChart(width="300" height="150")
+
+            .row.mt-3
+                .col-lg-8
+                    .card.mb-3
+                        .card-body
+                            .d-flex.justify-content-between.align-items-center.mb-2
+                                h5.mb-0 Đơn hàng mới nhất
+                                a(href="#") Xem tất cả
+                            table.table.table-hover
+                                thead
+                                    tr
+                                        th Mã
+                                        th Khách hàng
+                                        th Tổng tiền
+                                        th Trạng thái
+                                        th Thời gian
+                                        th
+                                tbody
+                                    - for(var i = 1; i <= 6; i++)
+                                    tr
+                                        td #{'DH' + (1000 + i)}
+                                        td Nguyễn Văn A
+                                        td 0₫
+                                        td
+                                            span.badge.bg-warning.text-dark Đang xử lý
+                                        td 2025-11-13 10:2#{i}
+                                        td
+                                            a.btn.btn-sm.btn-outline-secondary(href="#") Xem
+                .col-lg-4
+                    .card.mb-3
+                        .card-body
+                            h5.card-title Sản phẩm sắp hết
+                            ul.list-group
+                                - for(var j = 1; j <= 5; j++)
+                                    li.list-group-item.d-flex.justify-content-between.align-items-center
+                                        span
+                                            strong Sản phẩm #{j}
+                                            br
+                                            small.small-muted Mã SP: SP0#{j}
+                                        span
+                                            span.low-stock 1 còn lại
+            .row.mt-3
+                //- .col-md-6
+                //-     .card.mb-3
+                //-         .card-body
+                //-             h5.card-title Hoạt động gần đây
+                //-             ul.list-unstyled
+                //-                 - for(var k = 1; k <= 7; k++)
+                //-                     li.activity-item.mb-2
+                //-                         small.small-muted 2025-11-13 09:1#{k} —
+                //-                         |  Admin#{k} cập nhật đơn hàng DH10#{k}
+                .col-md-6
+                    .card.mb-3
+                        .card-body
+                            h5.card-title Hành động nhanh
+                            .d-grid.gap-2
+                                a(
+                                    href="/admin/products/create"
+                                    class="btn btn-success"
+                                ) Thêm sản phẩm
+                                //- button.btn.btn-success(type="button") Thêm sản phẩm
+                                button.btn.btn-outline-primary(type="button") Tạo đơn hàng
+                                button.btn.btn-outline-warning(type="button") Nhập kho
+
+        script.
+            const revenueCtx = document.getElementById('revenueChart');
+            if (revenueCtx) {
+                new Chart(revenueCtx, {
+                type: 'line',
+                data: {
+                    labels: ['01','02','03','04','05','06','07'],
+                    datasets: [{
+                    label: 'Doanh thu',
+                    data: [1200, 1900, 900, 2400, 1500, 2700, 3000],
+                    tension: 0.4,
+                    fill: true
+                    }]
+                },
+                options: { responsive: true }
+                });
+            }
+
+            const statusCtx = document.getElementById('statusChart');
+            if (statusCtx) {
+                new Chart(statusCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Hoàn tất','Đang xử lý','Hủy'],
+                        datasets: [{ data: [60, 30, 10] }]
+                    },
+                options: { responsive: true }
+                });
+            }
+
