@@ -59,7 +59,7 @@ module.exports.create = async(req,res) => {
         deleted: false
     };
 
-    const records = (await ProductCategory.find(find)).sort()
+    const records = await ProductCategory.find(find).sort()
 
     const newrecords = createTreeHelper.tree(records);
 
@@ -210,10 +210,15 @@ module.exports.edit = async (req,res) => {
             deleted: false,
             _id: req.params.id
         }
-        const record = await ProductCategory.findOne(find)
+        const data = await ProductCategory.findOne(find)
+
+        const records = await ProductCategory.find({deleted: false})
+        const newrecords = createTreeHelper.tree(records);
+
         res.render("admin/pages/product-category/edit.pug",{
-            pageTitle: "Chỉnh sửa sản phẩm",
-            record: record
+            pageTitle: "Chỉnh sửa danh mục sản phẩm",
+            data: data,
+            records: newrecords
         })
     } catch (error) {
         res.redirect(`${systemConfig.prefixAdmin}/products-category`)

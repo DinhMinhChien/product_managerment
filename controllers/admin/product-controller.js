@@ -2,7 +2,8 @@ const Product = require("../../models/product_model");
 const filterStatusHelper = require("../../helpers/filterStatus")
 const searchHelper = require("../../helpers/search")
 const paginationHelper = require("../../helpers/pagination")
-
+const createTreeHelper = require("../../helpers/createTree")
+const ProductCategory = require("../../models/product_category_model");
 const systemConfig = require("../../config/system")
 
 // [GET] /admin/products
@@ -168,9 +169,19 @@ module.exports.restoreItem = async (req,res) => {
 }
 
 //[GET]/admin/products/create
-module.exports.create = (req,res) => {
+module.exports.create = async (req,res) => {
+
+    let find = {
+        deleted: false
+    };
+
+    const category = await ProductCategory.find(find)
+
+    const newcategory = createTreeHelper.tree(category);
     res.render("admin/pages/product/create",{
-        pageTitle: "Thêm mới sản phẩm"
+        pageTitle: "Thêm mới sản phẩm",
+        category: newcategory
+
     })
 }
 module.exports.createPost = async (req,res) => {
@@ -197,9 +208,15 @@ module.exports.edit = async (req,res) => {
             _id: req.params.id
         }
         const product = await Product.findOne(find)
+        
+        const category = await ProductCategory.find({
+            deleted: false
+        })
+        const newcategory = createTreeHelper.tree(category);
         res.render("admin/pages/product/edit.pug",{
             pageTitle: "Chỉnh sửa sản phẩm",
-            product: product
+            product: product,
+            category: newcategory
         })
     } catch (error) {
         res.redirect(`${systemConfig.prefixAdmin}/products`)

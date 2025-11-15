@@ -1,15 +1,16 @@
 extends ../../layouts/default.pug
 include ../../mixins/alert.pug
+include ../../mixins/select-tree.pug
 block main 
     +alert-success(5000)
     +alert-error(5000)
     .card.mb-3 
         .card-header
         .card-body 
-            h1(class="mb-4") Chỉnh sửa sản phẩm 
+            h1(class="mb-4") Chỉnh sửa danh mục sản phẩm 
 
             form(
-                action=`${prefixAdmin}/products-category/edit/${record.id}?_method=PATCH`
+                action=`${prefixAdmin}/products-category/edit/${data.id}?_method=PATCH`
                 id="form-edit-product"
                 method="POST"
                 enctype="multipart/form-data"
@@ -21,8 +22,18 @@ block main
                         class="form-control"
                         id="title"
                         name="title"
-                        value=record.title
+                        value=data.title
                     )
+                div(class="form-control")
+                    label(for="parent_id") Danh mục cha
+                    select(
+                        name="parent_id"
+                        id="parent_id"
+                        class="form-control"
+                    ) 
+                        option(value="") -- Chọn danh mục cha --
+                            if(records)
+                                +select-tree(records,1,data.parent_id) 
                 div(class="form-group")
                     label(for="desc") Mô tả
                     textarea(
@@ -30,7 +41,7 @@ block main
                         id="desc"
                         name="description"
                         rows="5"
-                    ) #{record.description} 
+                    ) #{data.description} 
                     
                 div(class="form-group" upload-image)
                     label(for="thumbnail" class="d-block") Ảnh
@@ -44,7 +55,7 @@ block main
                     )
                     div(class="d-flex align-items-center gap-2 mt-2")
                         img(
-                            src=record.thumbnail
+                            src=data.thumbnail
                             upload-image-preview
                             class="image-preview d-block"
                         )
@@ -62,7 +73,7 @@ block main
                         name="position"
                         placeholder="Tự động tăng"
                         min="1"
-                        value=record.position
+                        value=data.position
                     )   
                 div(class="form-group form-check form-check-inline")
                     input(
@@ -71,7 +82,7 @@ block main
                         id="statusActive"
                         name="status"
                         value="active"
-                        checked = (record.status == "active" ? true : false)
+                        checked = (data.status == "active" ? true : false)
                     )
                     label(for="statusActive" class="form-check-label") Hoạt động
                 div(class="form-group form-check form-check-inline")
@@ -81,7 +92,7 @@ block main
                         id="statusInActive"
                         name="status"
                         value="inactive"
-                        checked = (record.status == "inactive" ? true : false)
+                        checked = (data.status == "inactive" ? true : false)
                     )
                     label(for="statusInActive" class="form-check-label") Dừng hoạt động    
                 div(class="form-group")
