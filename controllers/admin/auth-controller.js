@@ -2,8 +2,6 @@ const md5 = require('md5');
 const Account = require("../../models/account_model")
 const systemConfig = require("../../config/system")
 
-
-
 module.exports.login = (req,res) => {
     res.render("admin/pages/auth/login",{
         pageTitle: "Trang đăng nhập"
@@ -18,17 +16,17 @@ module.exports.loginPost = async (req,res) => {
         deleted: false
     })
     if(!user){
-        res.flash("error","Email không tồn tại")
+        req.flash("error","Email không tồn tại")
         res.redirect(req.get('Referrer'))
         return
     }
     if(md5(password) != user.password){
-        res.flash("error","Mật khẩu không chính xác.Vui lòng nhập lại mật khẩu")
+        req.flash("error","Mật khẩu không chính xác.Vui lòng nhập lại mật khẩu")
         res.redirect(req.get('Referrer'))
         return
     }
     if(user.status == "inactive"){
-        res.flash("error","Tài khoản đang bị khoá")
+        req.flash("error","Tài khoản đang bị khoá")
         res.redirect(req.get('Referrer'))
         return
     }
