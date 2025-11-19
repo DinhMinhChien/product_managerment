@@ -84,3 +84,32 @@
     padding: 3px 10px;
     border-radius: 8px;
 }
+/* nghịch thêm */
+.shopping-cart {
+    width: 50px;
+    height: 50px;
+}
+body {
+  min-height: 100vh;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+}
+/* hết */
+.product-title,
+.product-price,
+.product-discount,
+.product-stock,
+.product-thumbnail,
+.product-position,
+.product-desc {
+    border: 1px solid #ddd;  
+    padding: 12px;           
+    border-radius: 6px;       
+    background: #fff;       
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05); 
+}
+
+.product-thumbnail img {
+    width: 100px;
+    display: block;
+}

@@ -12,4 +12,7 @@ route.patch('/edit/:id',controller.editPatch)
 
 route.delete('/delete/:id',controller.deleteItem)
 
+route.get('/permissions',controller.permissions)
+route.patch('/permissions',controller.permissionsPatch)
+
 module.exports = route;

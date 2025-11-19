@@ -1,15 +1,29 @@
-header.header 
-    .container 
-        .row.align-items-center
-            .col-3 
-                .inner-logo 
-                    a(href="/")
-                        img(src="/images/logo.svg", alt="logo")
-
-            .col-9 
-                .inner-menu 
-                    ul 
-                        li 
-                            a(href="/") Trang chủ
-                        li 
-                            a(href="/products") Sản Phẩm 
+header
+    nav.navbar.navbar-expand-lg.navbar-dark.bg-primary 
+        .container
+            a(href="/").navbar-brand
+                i.fas.fa-store.mr-2
+                | VIET SHOP
+            button.navbar-toggler(type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav")
+                span.navbar-toggler-icon
+            #navbarNav.collapse.navbar-collapse 
+                ul.navbar-nav.me-auto.mb-2.mb-lg-0 
+                    li.nav-item
+                        a(href="/").nav-link.active Trang Chủ
+                    li.nav-item
+                        a(href="/products").nav-link Sản Phẩm
+                    li.nav-item
+                        a(
+                            href="#"
+                            class=product-category
+                        ).nav-link Danh mục sản phẩm
+                .d-flex.align-items-center
+                    a(
+                        href="/products/shopping-cart"
+                        class="btn btn-outline-light position-relative"
+                    )
+                        img(
+                            src="/images/shopping-cart.jpg", 
+                            alt="Giỏ hàng"
+                            class="shopping-cart"
+                        ) 

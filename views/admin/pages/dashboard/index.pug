@@ -33,14 +33,6 @@ block main
                         .card-body
                             h5.card-title Doanh thu theo thời gian
                             canvas#revenueChart(width="400" height="150")
-                .col-lg-4
-                    .card.mb-3
-                        .card-body
-                            h5.card-title Tỉ lệ trạng thái đơn hàng
-                            canvas#statusChart(width="300" height="150")
-
-            .row.mt-3
-                .col-lg-8
                     .card.mb-3
                         .card-body
                             .d-flex.justify-content-between.align-items-center.mb-2
@@ -56,16 +48,6 @@ block main
                                         th Thời gian
                                         th
                                 tbody
-                                    - for(var i = 1; i <= 6; i++)
-                                    tr
-                                        td #{'DH' + (1000 + i)}
-                                        td Nguyễn Văn A
-                                        td 0₫
-                                        td
-                                            span.badge.bg-warning.text-dark Đang xử lý
-                                        td 2025-11-13 10:2#{i}
-                                        td
-                                            a.btn.btn-sm.btn-outline-secondary(href="#") Xem
                 .col-lg-4
                     .card.mb-3
                         .card-body
@@ -79,17 +61,6 @@ block main
                                             small.small-muted Mã SP: SP0#{j}
                                         span
                                             span.low-stock 1 còn lại
-            .row.mt-3
-                //- .col-md-6
-                //-     .card.mb-3
-                //-         .card-body
-                //-             h5.card-title Hoạt động gần đây
-                //-             ul.list-unstyled
-                //-                 - for(var k = 1; k <= 7; k++)
-                //-                     li.activity-item.mb-2
-                //-                         small.small-muted 2025-11-13 09:1#{k} —
-                //-                         |  Admin#{k} cập nhật đơn hàng DH10#{k}
-                .col-md-6
                     .card.mb-3
                         .card-body
                             h5.card-title Hành động nhanh
@@ -98,7 +69,6 @@ block main
                                     href="/admin/products/create"
                                     class="btn btn-success"
                                 ) Thêm sản phẩm
-                                //- button.btn.btn-success(type="button") Thêm sản phẩm
                                 button.btn.btn-outline-primary(type="button") Tạo đơn hàng
                                 button.btn.btn-outline-warning(type="button") Nhập kho
 
@@ -131,4 +101,3 @@ block main
                 options: { responsive: true }
                 });
             }
-

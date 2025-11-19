@@ -1,0 +1,71 @@
+extends ../../layouts/default.pug
+block main
+    .container.my-5
+        .row.justify-content-center
+            .col-lg-8
+                .card.shadow-lg.border-0(style="border-radius:18px; overflow:hidden;")
+                    
+                    .card-header.text-white.p-4.text-center(
+                        style="background: linear-gradient(135deg, #28a745, #20c997); box-shadow: inset 0 0 12px rgba(255,255,255,0.3);"
+                    )
+                        h1.m-0.display-5.fw-bold Đặt Hàng Thành Công!
+                        p.lead.m-0.mt-2
+                            | Mã đơn hàng: 
+                            strong.text-warning= orderCode
+
+                    .card-body.p-5.text-center
+
+                        .mb-4
+                            i.fa-solid.fa-circle-check.text-success(
+                                style="font-size: 6rem; filter: drop-shadow(0 4px 10px rgba(40,167,69,0.3));"
+                            )
+
+                        // Thank you text
+                        p.lead.text-muted.mt-3.mb-5
+                            | Cảm ơn quý khách! Đơn hàng của bạn đã được tiếp nhận. 
+                            | Vui lòng kiểm tra email để xem thông tin chi tiết.
+                        .row.order-info-box.mt-4.p-4.rounded-4(
+                            style="background:#f8f9fa; border:1px solid #e3e3e3; box-shadow:0 4px 12px rgba(0,0,0,0.05);"
+                        )
+                            .col-md-6.mb-3
+                                p.mb-1.text-muted.small.fw-bold(style="letter-spacing:0.5px;") Tổng cộng
+                                h4.text-danger.fw-bold= totalAmount || '---'
+
+                            .col-md-6.mb-3
+                                p.mb-1.text-muted.small.fw-bold(style="letter-spacing:0.5px;") Phương thức thanh toán
+                                case payment_method
+                                    when 'cod'
+                                        h4.text-dark Thanh toán khi nhận hàng
+                                    when 'bank_transfer'
+                                        h4.text-dark Chuyển khoản ngân hàng
+                                    when 'credit_card'
+                                        h4.text-dark Thanh toán qua thẻ tín dụng/ghi nợ
+                                    default
+                                        h4.text-secondary Không xác định
+
+                            // Địa chỉ
+                            .col-12.mt-2
+                                p.mb-1.text-muted.small.fw-bold(style="letter-spacing:0.5px;") Giao hàng đến
+                                h5.fw-bold.text-wrap= shippingAddress
+
+                        hr.my-4
+
+                        .d-grid.gap-3.d-md-block
+                            a.btn.btn-primary.btn-lg.me-md-2(
+                                href="/", 
+                                style="border-radius:12px; padding:12px 26px;"
+                            )
+                                i.fa-solid.fa-house.me-2
+                                | Tiếp tục mua sắm
+
+                            a.btn.btn-outline-secondary.btn-lg(
+                                href="/user/orders",
+                                style="border-radius:12px; padding:12px 26px;"
+                            )
+                                i.fa-solid.fa-list-check.me-2
+                                | Xem chi tiết đơn hàng
+
+                    .card-footer.text-muted.small.text-center.bg-white.py-3(
+                        style="border-top:none; font-size:0.85rem;"
+                    )
+                        | Chúng tôi sẽ liên hệ với bạn trong vòng 24 giờ để xác nhận đơn hàng.

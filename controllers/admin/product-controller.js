@@ -42,6 +42,7 @@ module.exports.product = async(req,res) => {
     }else{
         sort.position="desc"
     }
+    
     //end sort
 
     const products =  await Product.find(find)

@@ -63,3 +63,25 @@ module.exports.deleteItem = async (req,res) => {
     req.flash("success",`Xoá thành công !`)
     res.redirect(req.get('Referrer'));
 }     
+module.exports.permissions = async (req,res) => {
+    let find = {
+        deleted: false
+    }
+    const records = await Role.find(find)
+
+    res.render("admin/pages/roles/permissions",{
+        pageTitle: "Thông tin phân quyền ",
+        records: records
+    });
+
+}
+module.exports.permissionsPatch = async (req,res) => {
+    const permissions = JSON.parse(req.body.permissions)
+
+    for (const item of permissions) {
+        await Role.updateOne({_id: item.id},{permissions: item.permissions})  
+    }
+
+    req.flash("success","Cập nhật quyền thành công")
+    res.redirect(req.get('Referrer'))
+}

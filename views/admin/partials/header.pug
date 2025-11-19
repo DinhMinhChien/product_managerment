@@ -1,7 +1,14 @@
 header.header 
     .container-fluid 
-        .row-align-items-center 
+        .row.align-items-center 
             .col-3 
                 .inner-logo 
                     a(href="/admin/dashboard") ADMIN 
+
             .col-9
+                .d-flex.justify-content-end
+                    a(
+                        href=`${prefixAdmin}/auth/logout`
+                        class="btn btn-danger btn-sm px-3"
+                        style="border-radius: 6px;"
+                    ) Đăng xuất
