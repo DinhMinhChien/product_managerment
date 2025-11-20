@@ -6,25 +6,28 @@ html
         link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css")
         link(rel="stylesheet", href="/admin/css/style.css")
     body 
-        include ../partials/header.pug
-        .body
+        if(role.permissions.length > 0)
+            include ../partials/header.pug
+            .body
 
-            include ../partials/sider.pug
-            
-            .main 
-                block main 
-        
-
-        script(src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js")
-        script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.min.js")
-        
-        //- tinymce
-        script(src="https://cdn.jsdelivr.net/npm/tinymce@6/tinymce.min.js")
+                include ../partials/sider.pug
                 
-        script(src="/admin/js/tinymce-config.js")
-        //- end tinymce
-        
-        script(src="/admin/js/script.js") 
+                .main 
+                    block main 
+            
+
+            script(src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js")
+            script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.min.js")
+            
+            //- tinymce
+            script(src="https://cdn.jsdelivr.net/npm/tinymce@6/tinymce.min.js")
+                    
+            script(src="/admin/js/tinymce-config.js")
+            //- end tinymce
+            
+            script(src="/admin/js/script.js") 
+        else 
+            h1 Bạn không có quyền truy cập 
 
 
         

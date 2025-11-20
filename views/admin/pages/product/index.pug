@@ -39,10 +39,11 @@ block main
                 .col-10
                     +form-change-multi(`${prefixAdmin}/products/change-multi?_method=PATCH`)
                 .col-2 
-                    a(
-                        href=`${prefixAdmin}/products/create`
-                        class="btn btn-outline-success"
-                    ) + Thêm mới
+                    if(role.permissions.includes("products_create"))
+                        a(
+                            href=`${prefixAdmin}/products/create`
+                            class="btn btn-outline-success"
+                        ) + Thêm mới
             table(
                 class="table table-hover table-sm"
                 checkbox-multi 
@@ -86,37 +87,50 @@ block main
                                     name="position"
                                 )
                             td 
-                                if(item.status == "active")
-                                    a(
-                                        href="javascript:;"
-                                        data-status=item.status 
-                                        data-id=item.id 
-                                        button-change-status
-                                        class="badge text-bg-success text-decoration-none"
-                                    ) Hoạt động
+                                if(role.permissions.includes("products_edit"))
+                                    if(item.status == "active")
+                                        a(
+                                            href="javascript:;"
+                                            data-status=item.status 
+                                            data-id=item.id 
+                                            button-change-status
+                                            class="badge text-bg-success text-decoration-none"
+                                        ) Hoạt động
+                                    else 
+                                        a(
+                                            href="javascript:;"
+                                            data-status=item.status 
+                                            data-id=item.id 
+                                            button-change-status 
+                                            class="badge text-bg-danger text-decoration-none"
+                                        ) Dừng hoạt động
+
                                 else 
-                                    a(
-                                        href="javascript:;"
-                                        data-status=item.status 
-                                        data-id=item.id 
-                                        button-change-status 
-                                        class="badge text-bg-danger text-decoration-none"
-                                    ) Dừng hoạt động
+                                    if(item.status == "active")
+                                        span(
+                                            class="badge text-bg-success text-decoration-none"
+                                        ) Hoạt động
+                                    else 
+                                        a( 
+                                            class="badge text-bg-danger text-decoration-none"
+                                        ) Dừng hoạt động
 
                             td 
                                 a(
                                     href=`${prefixAdmin}/products/detail/${item.id}`
                                     class="btn btn-secondary btn-sm"
                                 ) Chi tiết
-                                a(
-                                    href=`${prefixAdmin}/products/edit/${item.id}`
-                                    class="btn btn-warning btn-sm"
-                                ) Sửa
-                                button(
-                                    class="btn btn-danger btn-sm ml-1"
-                                    button-delete
-                                    data-id=item.id
-                                ) Xoá
+                                if(role.permissions.includes("products_edit"))
+                                    a(
+                                        href=`${prefixAdmin}/products/edit/${item.id}`
+                                        class="btn btn-warning btn-sm"
+                                    ) Sửa
+                                if(role.permissions.includes("products_delete"))
+                                    button(
+                                        class="btn btn-danger btn-sm ml-1"
+                                        button-delete
+                                        data-id=item.id
+                                    ) Xoá
 
     +pagination(pagination)
 
