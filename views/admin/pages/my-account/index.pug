@@ -1,0 +1,54 @@
+extends ../../layouts/default.pug
+
+block main
+    .container.mt-4
+        .row.justify-content-center
+            .col-md-8
+                .card.shadow.border-0
+                    .card-body.p-4
+                        h2.text-center.mb-4.text-primary Thông tin cá nhân
+
+                        .text-center.mb-3
+                            img.rounded-circle.shadow(
+                                src=(user.avatar ? user.avatar : "/images/avatar.png")
+                                width="150"
+                                height="150"
+                                style="object-fit: cover;"
+                            )
+
+                        hr
+                        .mt-3
+                            if user.fullName
+                                .d-flex.justify-content-between.mb-2
+                                    span.text-muted Họ và tên:
+                                    span.font-weight-bold #{user.fullName}
+
+                            if user.email
+                                .d-flex.justify-content-between.mb-2
+                                    span.text-muted Email:
+                                    span.font-weight-bold #{user.email}
+
+                            if user.phone
+                                .d-flex.justify-content-between.mb-2
+                                    span.text-muted Số điện thoại:
+                                    span.font-weight-bold #{user.phone}
+
+                            // Status
+                            .d-flex.justify-content-between.mb-2
+                                span.text-muted Trạng thái:
+                                span.font-weight-bold(
+                                    class=(user.status === "active" ? "text-success" : "text-danger")
+                                ) #{user.status === "active" ? "Hoạt động" : "Dừng hoạt động"}
+
+                            // Role
+                            if role && role.title
+                                .d-flex.justify-content-between.mb-2
+                                    span.text-muted Phân quyền:
+                                    span.font-weight-bold #{role.title}
+
+                        hr
+
+                        .text-center.mt-3
+                            a.btn.btn-primary.px-4.py-2(
+                                href=`${prefixAdmin}/my-account/edit`
+                            ) Chỉnh sửa thông tin

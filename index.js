@@ -10,7 +10,7 @@ require("dotenv").config();
 const route = require("./routes/client/index-route")
 const systemConfig = require("./config/system");
 const routeAdmin = require("./routes/admin/index-route")
-
+const moment = require('moment')
 database.connect();
 
 const app = express();
@@ -34,6 +34,7 @@ app.use('/tinymce', express.static(path.join(__dirname, 'node_modules', 'tinymce
 //end tinymce
 
 app.locals.prefixAdmin = systemConfig.prefixAdmin
+app.locals.moment = moment
 app.use(express.static(`${__dirname}/public`));
 
 

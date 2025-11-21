@@ -82,7 +82,7 @@ module.exports.editPatch = async (req,res) => {
         }
         await Account.updateOne({_id: id},req.body)
 
-        res.flash("success","Cập nhật tài khoản thành công")
+        req.flash("success","Cập nhật tài khoản thành công")
     }
     res.redirect(req.get('Referrer'))
 }

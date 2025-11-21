@@ -7,8 +7,13 @@ header.header
 
             .col-9
                 .d-flex.justify-content-end
-                    a(
-                        href=`${prefixAdmin}/auth/logout`
-                        class="btn btn-danger btn-sm px-3"
-                        style="border-radius: 6px;"
-                    ) Đăng xuất
+                    div(class="text-right")
+                        a(
+                            href=`${prefixAdmin}/my-account`
+                            class="btn btn-primary btn-sm mr-2"
+                        ) #{user.fullName}
+                        a(
+                            href=`${prefixAdmin}/auth/logout`
+                            class="btn btn-danger btn-sm px-3"
+                            style="border-radius: 6px;"
+                        ) Đăng xuất

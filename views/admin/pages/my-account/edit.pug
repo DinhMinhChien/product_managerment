@@ -1,0 +1,89 @@
+extends ../../layouts/default.pug
+include ../../mixins/alert.pug
+
+block main
+    .container.mt-4
+        .row.justify-content-center
+            .col-md-8
+                h2.text-center.text-primary.mb-4 Cập nhật thông tin cá nhân
+
+                +alert-error(5000)
+                +alert-success(5000)
+
+                .card.shadow.border-0
+                    .card-body.p-4
+                        form(
+                            action=`${prefixAdmin}/my-account/edit?_method=PATCH`
+                            method="POST"
+                            enctype="multipart/form-data"
+                        )
+                            div(class="form-group.mb-3")
+                                label.font-weight-bold(for="fullName") Họ và tên
+                                input#fullName.form-control.mt-2(
+                                    type="text"
+                                    name="fullName"
+                                    required
+                                    value=user.fullName
+                                    placeholder="Nhập họ tên"
+                                )
+                            div(class="form-group mb-3")
+                                label.font-weight-bold(for="email") Email
+                                input#email.form-control.mt-2(
+                                    type="email"
+                                    name="email"
+                                    required
+                                    value=user.email
+                                    placeholder="Nhập email"
+                                )
+                            div(class="form-group mb-3")
+                                label.font-weight-bold(for="password") Mật khẩu (để trống nếu không đổi)
+                                input#password.form-control.mt-2(
+                                    type="password"
+                                    name="password"
+                                    placeholder="Nhập mật khẩu mới"
+                                )
+                            div(class="form-group mb-3")
+                                label.font-weight-bold(for="phone") Số điện thoại
+                                input(
+                                    id="phone"
+                                    class="form-control mt-2"
+                                    type="number"
+                                    name="phone"
+                                    value=user.phone
+                                    placeholder="Nhập số điện thoại"
+                                )
+                            div(
+                                class="form-group mb-4"
+                                upload-image
+                            )
+                                label(
+                                    class="font-weight-bold"
+                                    for="avatar"
+                                ) Ảnh đại diện
+                                input(
+                                    type="file"
+                                    id="avatar"
+                                    class="form-control mt-2"
+                                    name="avatar"
+                                    accept="image/*"
+                                    upload-image-input
+                                )
+
+                                div(class="d-flex align-items-center mt-3")
+                                    img(
+                                        src=(user.avatar ? user.avatar : "/images/avatar.png")
+                                        width="100"
+                                        height="100"
+                                        class="rounded shadow-sm"
+                                        style="object-fit: cover;"
+                                        upload-image-preview
+                                    )
+                                    button(
+                                        type="button"
+                                        class="btn btn-danger btn-sm ms-3"
+                                        upload-image-clear
+                                    ) Xóa
+                            div(class="text-center mt-4")
+                                button.btn.btn-primary.px-4.py-2(type="submit") Cập nhật
+
+    script(src="/admin/js/products.js")

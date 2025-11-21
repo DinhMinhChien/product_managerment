@@ -1,3 +1,4 @@
+include ../mixins/sub-menu.pug
 header
     nav.navbar.navbar-expand-lg.navbar-dark.bg-primary 
         .container
@@ -8,22 +9,28 @@ header
                 span.navbar-toggler-icon
             #navbarNav.collapse.navbar-collapse 
                 ul.navbar-nav.me-auto.mb-2.mb-lg-0 
-                    li.nav-item
-                        a(href="/").nav-link.active Trang Chủ
-                    li.nav-item
-                        a(href="/products").nav-link Sản Phẩm
-                    li.nav-item
+                    li(class="nav-item")
                         a(
-                            href="#"
-                            class=product-category
-                        ).nav-link Danh mục sản phẩm
-                .d-flex.align-items-center
+                            href="/"
+                            class="nav-link active"
+                        ) Trang Chủ
+                    li(class="nav-item sub-menu")
+                        -const pathProduct = '/products'
+                        a(
+                            href=pathProduct
+                            class="nav-link"
+                        ) Sản Phẩm
+                        +sub-menu(layoutProductsCategory,pathProduct)
+                        
+
+                    
+                div(class="d-flex.align-items-center")
                     a(
                         href="/products/shopping-cart"
                         class="btn btn-outline-light position-relative"
                     )
                         img(
-                            src="/images/shopping-cart.png", 
+                            src="/images/shopping-cart.png" 
                             alt="Giỏ hàng"
                             class="shopping-cart"
                         ) 

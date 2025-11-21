@@ -5,6 +5,7 @@ include ../../mixins/pagination.pug
 include ../../mixins/form-change-multi.pug
 include ../../mixins/alert.pug
 include ../../mixins/sort.pug
+include ../../mixins/moment.pug
 block main 
 
     +alert-success("5000")
@@ -58,6 +59,8 @@ block main
                         th Giá
                         th Vị trí
                         th Trạng thái 
+                        th Người tạo
+                        th Người cập nhật 
                         th Hành động
                 tbody
                     each item, index in products 
@@ -114,7 +117,16 @@ block main
                                         a( 
                                             class="badge text-bg-danger text-decoration-none"
                                         ) Dừng hoạt động
-
+                            td 
+                                span #{item.accountFullName}
+                                span 
+                                    +formatDateTime(item.createdBy.createdAt)
+                            td  
+                                - const updatedBy = item.updatedBy.slice(-1)[0]
+                                if(updatedBy)
+                                    span #{updatedBy.accountFullName}
+                                    span 
+                                        +formatDateTime(updatedBy.updatedAt)
                             td 
                                 a(
                                     href=`${prefixAdmin}/products/detail/${item.id}`

@@ -113,3 +113,84 @@ body {
     width: 100px;
     display: block;
 }
+
+.sub-menu, .sub-menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sub-menu {
+    position: relative;
+    z-index: 999;
+}
+
+.sub-menu > a {
+    display: block;
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    transition: 0.2s ease;
+}
+
+.sub-menu > ul {
+    position: absolute;
+    left: 0;
+    top: 100%;
+    min-width: 200px;
+    background: #ffffff;
+    border-radius: 8px;
+    padding: 6px 0;
+    display: none;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+}
+
+.sub-menu:hover > ul {
+    display: block;
+}
+.sub-menu ul li {
+    position: relative;
+}
+
+.sub-menu ul li > a {
+    display: block;
+    padding: 10px 14px;
+    font-size: 15px;
+    color: #333;
+    text-decoration: none;
+    transition: 0.2s ease;
+}
+
+.sub-menu ul li > a:hover {
+    background: #f7f7f7;
+    color: #111;
+}
+
+.sub-menu ul li ul {
+    position: absolute;
+    left: 100%;
+    top: 0;
+    min-width: 200px;
+    background: #ffffff;
+    border-radius: 8px;
+    padding: 6px 0;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+    display: none;
+}
+
+.sub-menu ul li:hover > ul {
+    display: block;
+}
+
+.sub-menu ul li:has(ul) > a::after {
+    content: "›";
+    float: right;
+    font-size: 13px;
+    opacity: 0.6;
+    margin-left: 6px;
+    transition: 0.2s;
+}
+.sub-menu ul li:hover > a::after {
+    opacity: 1;
+}
