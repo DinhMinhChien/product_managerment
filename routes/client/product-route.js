@@ -5,10 +5,9 @@ const controller = require("../../controllers/client/product-controller")
 
 route.get("/",controller.index);
 
-route.get("/:slug",controller.detail);
+route.get("/:slugCategory",controller.category);
 
-route.post("/:slug/purchase",controller.purchase)
+route.get("/detail/:slugProduct",controller.detail);
 
-route.post("/order-success/:id/:quantity", controller.orderSuccess);
 
 module.exports = route;

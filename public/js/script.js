@@ -29,19 +29,25 @@ if(buttonsPagination){
     })
 }
 
+//show alert
+const showAlert = document.querySelector("[show-alert]")
+if(showAlert){
+    const time = parseInt(showAlert.getAttribute("data-time"))
+    const closeAlert = showAlert.querySelector("[close-alert]")
+    setTimeout(()=>{
+        showAlert.classList.add("alert-hidden")
+    },time)
+    closeAlert.addEventListener("click",() => {
+        showAlert.classList.add("alert-hidden")
+    })
+}
+//end show alert
 
-const formInput = document.querySelector("[form-quantity]")
-const buttonBuyProduct = document.querySelector("[buy-product]")
-const buttonAddToCart = document.querySelector("[productAddToCart]")
-
-buttonBuyProduct.addEventListener('click',()=>{
-    const path = buttonBuyProduct.getAttribute('path');
-    formInput.action = path;
-    formInput.submit();
-})
-
-buttonAddToCart.addEventListener('click',()=>{
-    const path = buttonAddToCart.getAttribute('path');
-    formInput.action = path;
-    formInput.submit();
-})
+buttonGoBack = document.querySelectorAll("[button-go-back]")
+if(buttonGoBack.length >0) {
+    buttonGoBack.forEach(button => {
+        button.addEventListener('click',() => {
+            history.back()
+        })
+    })
+}

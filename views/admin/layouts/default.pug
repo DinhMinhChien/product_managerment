@@ -5,6 +5,7 @@ html
         
         link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css")
         link(rel="stylesheet", href="/admin/css/style.css")
+        link(rel="stylesheet", href="/admin/css/dashboard_style.css")
     body 
         if(role.permissions.length > 0)
             include ../partials/header.pug
@@ -26,6 +27,8 @@ html
             //- end tinymce
             
             script(src="/admin/js/script.js") 
+            script(src="/socket.io/socket.io.js")
+            script(src="/admin/js/admin.js") 
         else 
             h1 Bạn không có quyền truy cập 
 

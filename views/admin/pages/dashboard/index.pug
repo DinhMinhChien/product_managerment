@@ -1,103 +1,73 @@
 extends ../../layouts/default.pug
+include ../../mixins/alert.pug
 
 block main
-    head
-        meta(charset="utf-8")
-        meta(name="viewport" content="width=device-width, initial-scale=1")
-        title Admin Dashboard
-            .kpi-card { border-radius: 12px; box-shadow: 0 6px 18px rgba(0,0,0,0.04); }
-            .small-muted { font-size: .85rem; color: #6c757d; }
-            .low-stock { color: #c41e1e; font-weight: 600; }
-            .activity-item { font-size: .95rem; }
-    body
-        .container-fluid.p-4
-            .row.mb-3
-                .col-8
-                    h1.mb-0 Admin Dashboard
-                    p.small-muted.mt-1 Trang tổng quan quản trị cửa hàng
-            .row.g-3
-                each val, index in ['Tổng đơn hàng', 'Doanh thu (tháng)', 'Khách hàng', 'Sản phẩm']
-                    .col-12.col-md-3
-                        .card.kpi-card.p-3
-                            .d-flex.justify-content-between.align-items-center
-                            .me-3
-                                h6.mb-1= val
-                                h4.mb-0 0
-                                p.small-muted.mb-0
-                                    | So với kỳ trước: 
-                                    span.text-success.ml-2 +0%
-                            i.bi.bi-graph-up-arrow(style="font-size: 28px")
-            .row.mt-4
-                .col-lg-8
-                    .card.mb-3
-                        .card-body
-                            h5.card-title Doanh thu theo thời gian
-                            canvas#revenueChart(width="400" height="150")
-                    .card.mb-3
-                        .card-body
-                            .d-flex.justify-content-between.align-items-center.mb-2
-                                h5.mb-0 Đơn hàng mới nhất
-                                a(href="#") Xem tất cả
-                            table.table.table-hover
+    +alert-success(5000)
+    .container-fluid.p-4
+        .row.mb-3
+            .col-8
+                h1.mb-0 Admin Dashboard
+
+        .row.g-3
+            .col-12.col-md-3
+                .card.kpi-card.p-3
+                    h6.mb-1 Tổng đơn hàng
+                    h4#total-orders.mb-0 #{totalOrders}
+
+            .col-12.col-md-3
+                .card.kpi-card.p-3
+                    h6.mb-1 Doanh thu (tháng)
+                    h4#total-revenue.mb-0 #{totalRevenue.toLocaleString()} $
+
+        .row.mt-4
+            .col-lg-8
+                .card.mb-3
+                    .card-body
+                        h5.card-title Đơn hàng mới nhất
+                        table.table.table-hover
+                            thead
+                                tr
+                                    th Mã
+                                    th Khách hàng
+                                    th Tổng tiền
+                                    th Trạng thái
+                                    th Thời gian
+                            tbody#latest-orders
+                                each order in latestOrders
+                                    if order.status == "Đang xử lí"|| order.status == "Đang giao hàng"
+                                        tr
+                                            td.fw-bold= order.id
+                                            td.fw-bold= order.customer
+                                            td.fw-bold #{order.total.toLocaleString()} $
+                                            td.fw-bold
+                                                button(
+                                                    class="btn btn-success" 
+                                                    button-change-status-order=(order.status=="Đang xử lí"?"Đang giao hàng":"Hoàn thành")
+                                                    data-id=order.id
+                                                ) #{order.status}
+                                            td.fw-bold= new Date(order.time).toLocaleString()
+
+            .col-lg-4
+                .card.mb-3
+                    .card-body
+                        h5.card-title Hành động nhanh
+                        .d-grid.gap-2
+                            a(href="/admin/products/create" class="btn btn-success btn-sm") Thêm sản phẩm
+                            a(href="/admin/order" class="btn btn-primary btn-sm") Xem tất cả đơn hàng
+
+                .card.mb-3
+                    .card-body
+                        h5.card-title Sản phẩm gần hết hàng
+                        if lowStockProducts.length
+                            table.table.table-sm.table-bordered
                                 thead
                                     tr
-                                        th Mã
-                                        th Khách hàng
-                                        th Tổng tiền
-                                        th Trạng thái
-                                        th Thời gian
-                                        th
+                                        th Tên sản phẩm
+                                        th Số lượng tồn
                                 tbody
-                .col-lg-4
-                    .card.mb-3
-                        .card-body
-                            h5.card-title Sản phẩm sắp hết
-                            ul.list-group
-                                - for(var j = 1; j <= 5; j++)
-                                    li.list-group-item.d-flex.justify-content-between.align-items-center
-                                        span
-                                            strong Sản phẩm #{j}
-                                            br
-                                            small.small-muted Mã SP: SP0#{j}
-                                        span
-                                            span.low-stock 1 còn lại
-                    .card.mb-3
-                        .card-body
-                            h5.card-title Hành động nhanh
-                            .d-grid.gap-2
-                                a(
-                                    href="/admin/products/create"
-                                    class="btn btn-success"
-                                ) Thêm sản phẩm
-                                button.btn.btn-outline-primary(type="button") Tạo đơn hàng
-                                button.btn.btn-outline-warning(type="button") Nhập kho
-
-        script.
-            const revenueCtx = document.getElementById('revenueChart');
-            if (revenueCtx) {
-                new Chart(revenueCtx, {
-                type: 'line',
-                data: {
-                    labels: ['01','02','03','04','05','06','07'],
-                    datasets: [{
-                    label: 'Doanh thu',
-                    data: [1200, 1900, 900, 2400, 1500, 2700, 3000],
-                    tension: 0.4,
-                    fill: true
-                    }]
-                },
-                options: { responsive: true }
-                });
-            }
-
-            const statusCtx = document.getElementById('statusChart');
-            if (statusCtx) {
-                new Chart(statusCtx, {
-                    type: 'doughnut',
-                    data: {
-                        labels: ['Hoàn tất','Đang xử lý','Hủy'],
-                        datasets: [{ data: [60, 30, 10] }]
-                    },
-                options: { responsive: true }
-                });
-            }
+                                    each product in lowStockProducts
+                                        tr
+                                            td= product.title
+                                            td.text-danger.fw-bold= product.stock
+                        else
+                            p.text-muted Không có sản phẩm nào gần hết hàng

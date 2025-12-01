@@ -21,12 +21,18 @@ header
                             class="nav-link"
                         ) Sản Phẩm
                         +sub-menu(layoutProductsCategory,pathProduct)
+                    if(user)
+                        li(class="nav-item")
+                            a(href="/user/logout" class="nav-link") Đăng xuất
+                    else 
+                        li(class="nav-item")
+                            a(href="/user/login" class="nav-link text-right") Đăng nhập
+                        li(class="nav-item")
+                            a(href="/user/register" class="nav-link text-right") Đăng ký
                         
-
-                    
                 div(class="d-flex.align-items-center")
                     a(
-                        href="/products/shopping-cart"
+                        href="/cart"
                         class="btn btn-outline-light position-relative"
                     )
                         img(
@@ -34,3 +40,4 @@ header
                             alt="Giỏ hàng"
                             class="shopping-cart"
                         ) 
+                        span (#{miniCart ? miniCart.totalProduct : "0"})

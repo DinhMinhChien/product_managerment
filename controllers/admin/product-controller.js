@@ -284,8 +284,6 @@ module.exports.editPatch = async (req,res) => {
             account_id: res.locals.user.id,
             updatedAt: new Date()
         }
-        req.body.updatedBy = updatedBy
-
         await Product.updateOne({_id: req.params.id},{
             ...req.body,
             $push: {updatedBy: updatedBy}

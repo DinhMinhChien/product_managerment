@@ -1,77 +1,56 @@
 extends ../../layouts/default.pug
-
+include ../../mixins/box-head.pug
+include ../../mixins/alert.pug
 block main 
-    .container.my-5
-        .row.justify-content-center
-            .col-lg-8
+    +alert-success(2000)
+    .product-detail
+        .container.my-5
+            button(
+                class="btn btn-secondary"
+                button-go-back
+            ) BACK
+            .row
+                .col-6
+                    .inner-thumb 
+                        img(src=product.thumbnail,alt=product.title)
+                .col-6
+                    h1(class="inner-title") #{product.title}
 
-                .card.shadow-sm.p-4.rounded-4(
-                    style="border:1px solid #e6e6e6; background:#fff;"
-                )
-                    if product.title
-                        h1.fw-bold.mb-4.text-primary(style="font-size:2rem;")= product.title
+                    if(product.category)
+                        div(class="inner-category")
+                            span Danh mục:
+                            a(href=`/products/${product.category.slug}`) #{product.category.title}
 
-                    if product.price
-                        .mb-3
-                            p.text-muted.small.mb-1 Giá niêm yết
-                            h3.text-danger.fw-bold(style="font-size:1.8rem;")
-                                | #{product.price}$
+                    if(product.priceNew)
+                        div(class="inner-price-new") #{product.priceNew}$
+                    
+                    if(product.price)
+                        div(class="inner-price-old") #{product.price}$
+                    if(product.discountPercentage)
+                        div(class="inner-percen") Giảm tới <span> #{product.discountPercentage}% </span>
+                    
+                    if(product.stock)
+                        div(class="inner-stock") Còn lại <span> #{product.stock} </span> sản phẩm
 
-                    if product.discountPercentage
-                        .mb-3
-                            p.text-muted.small.mb-1 Giảm giá
-                            h5.fw-bold.text-success
-                                | -#{product.discountPercentage}%
-
-                    if product.stock
-                        .mb-3
-                            p.text-muted.small.mb-1 Số lượng còn lại
-                            h5.fw-semibold.text-dark #{product.stock}
-
-                    if product.thumbnail
-                        .text-center.my-4
-                            img(
-                                src=product.thumbnail
-                                alt="Product image"
-                                style="max-width:250px; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.08);"
-                            )
-
-                    if product.description
-                        hr.my-4
-                        h4.fw-bold.mb-3 Mô tả sản phẩm
-                        p.lead.text-secondary(style="line-height:1.7; font-size:1.05rem;")
-                            | #{product.description}
-
-        form(
-            action=""
-            method="POST"
-            form-quantity
-            class="purchase-form p-4 rounded shadow-sm bg-white"
-        )
-            .form-group.mb-3
-                label(for="quantity" class="fw-bold") Số lượng
-                input(
-                    type="number"
-                    class="form-control mt-2"
-                    id="quantity"
-                    name="quantity"
-                    placeholder="Nhập số lượng mua"
-                    min="1"
-                    required
-                )
-            .d-flex.gap-2.mt-4
-                button(
-                    class="btn btn-primary flex-fill py-2 fw-bold"
-                    name="action"
-                    value="buy"
-                    buy-product
-                    path=`/products/${product.slug}/purchase`
-                ) Mua hàng
-                button(
-                    class="btn btn-outline-secondary flex-fill py-2 fw-bold"
-                    name="action"
-                    value="add_cart"
-                    productAddToCart
-                    path=`/products/addToCart/${product.slug}`
-                ) Thêm vào giỏ hàng
-
+                    form(
+                        action=`/cart/add/${product.id}`
+                        method="POST"
+                    )
+                        input(
+                            class="form-control mb-2"
+                            type="number"
+                            name="quantity"
+                            value=1
+                            min=1
+                            max=product.stock
+                        )
+                        button(
+                            type="submit"
+                            class="btn btn-success btn-block"
+                        ) Thêm vào giỏ hàng
+            hr
+            .container.my-5 
+                .row 
+                    .col-12 
+                        +box-head("Mô tả sản phẩm")
+                        .inner-desc !{product.description}

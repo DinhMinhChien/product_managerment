@@ -1,7 +1,10 @@
-const express = require ('express');
-const route = express.Router();
+const express = require("express");
+const router = express.Router();
+const Order = require("../../models/order_model");
 const controller = require("../../controllers/admin/dashboard-controller")
 
-route.get('/',controller.dashboard)
+// Trang dashboard admin
+router.get("/",controller.dashboard);
+router.get("/order/:status/:orderId",controller.status);
 
-module.exports = route;
+module.exports = router;
