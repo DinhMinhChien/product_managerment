@@ -32,79 +32,83 @@ module.exports.order = async (req, res) => {
     const cartId = req.cookies.cartId;
     const userInfo = req.body;
 
-    const cart = await Cart.findOne({
-        _id: cartId 
-    });
+    const cart = await Cart.findOne({ _id: cartId });
 
-    let products = [];
+    // 1. Kiểm tra tồn kho
+    for (const item of cart.products) {
+        const productInfo = await Product.findOne({ _id: item.product_id });
 
-    for (const product of cart.products) {
-        const objectProduct = {
-            product_id: product.product_id,
-            price: 0,
-            discountPercentage: 0,
-            quantity: product.quantity
-        };
+        if (!productInfo) {
+            return res.send("Sản phẩm không tồn tại!");
+        }
 
-        const productInfo = await Product.findOne({
-            _id: product.product_id
-        });
-
-        objectProduct.price = productInfo.price;
-        objectProduct.discountPercentage = productInfo.discountPercentage;
-
-        products.push(objectProduct);
+        if (productInfo.stock < item.quantity) {
+            const errorMessage = `Sản phẩm: **${productInfo.title}** không đủ số lượng! Tồn kho hiện tại: **${productInfo.stock}**. Vui lòng kiểm tra lại giỏ hàng.`;
+            req.flash('error', errorMessage);
+            
+            return res.redirect('/checkout');
+        }
     }
 
-    const objectOrder = {
-        cart_id: cartId,
-        userInfo: userInfo,
-        products: products
-    };
+    // 2. Trừ tồn kho
+    for (const item of cart.products) {
+        await Product.updateOne(
+            { _id: item.product_id },
+            { $inc: { stock: -item.quantity } }
+        );
+    }
 
-    const order = new Order(objectOrder);
+    // 3. Chuẩn bị dữ liệu sản phẩm để tạo order
+    let products = [];
+    for (const product of cart.products) {
+        const productInfo = await Product.findOne({ _id: product.product_id });
+
+        products.push({
+            product_id: product.product_id,
+            price: productInfo.price,
+            discountPercentage: productInfo.discountPercentage,
+            quantity: product.quantity
+        });
+    }
+
+    // 4. Tạo đơn hàng
+    const order = new Order({
+        cart_id: cartId,
+        userInfo,
+        products
+    });
     await order.save();
 
-    await Cart.updateOne({
-        _id: cartId
-    }, {
-        products: []
-    });
+    // 5. Clear giỏ hàng
+    await Cart.updateOne(
+        { _id: cartId },
+        { products: [] }
+    );
 
+    // 6. Redirect
     res.redirect(`/checkout/success/${order.id}`);
-}
+};
+
 
 module.exports.success = async (req, res) => {
     const order = await Order.findOne({ _id: req.params.orderId });
 
-    // Xử lý từng sản phẩm trong đơn
     for (const product of order.products) {
         const productInfo = await Product.findOne({
             _id: product.product_id
-        }).select("title stock thumbnail");
+        }).select("title thumbnail price discountPercentage");
 
         product.productInfo = productInfo;
-
         product.priceNew = productsHelper.priceNewProduct(product);
         product.totalPrice = (product.priceNew * product.quantity).toFixed(2);
-
-        if (productInfo.stock < product.quantity) {
-            return res.send("Số lượng đặt vượt quá tồn kho!");
-        }
-
-        await Product.updateOne(
-            { _id: product.product_id },
-            { $inc: { stock: -product.quantity } }
-        );
     }
 
-    // Tổng giá trị đơn hàng
-    order.totalPrice = order.products.reduce((sum, item) => sum + item.totalPrice, 0);
-    order.totalPrice = parseFloat(order.totalPrice).toFixed(2);
+    order.totalPrice = order.products.reduce((sum, item) => 
+        sum + parseFloat(item.totalPrice), 0
+    ).toFixed(2);
 
-    // ========== REALTIME ========== //
+    // realtime
     const io = req.app.get("io");
-
     const allOrders = await Order.find().sort({ createdAt: -1 });
 
     const totalOrders = allOrders.length;
@@ -117,25 +121,23 @@ module.exports.success = async (req, res) => {
         return sum + orderTotal;
     }, 0);
 
-    // Lấy 5 đơn mới nhất và map thành đúng cấu trúc client cần
     const latestOrders = allOrders
-    .filter(o => o.status === "Đang xử lí" || o.status === "Đang giao hàng")
-    .slice(0, 5)
-    .map(o => {
-        const orderTotal = o.products.reduce((acc, p) => {
-            const priceAfterDiscount = p.price * (1 - p.discountPercentage / 100);
-            return acc + priceAfterDiscount * p.quantity;
-        }, 0);
+        .filter(o => o.status === "Đang xử lí" || o.status === "Đang giao hàng")
+        .slice(0, 5)
+        .map(o => {
+            const orderTotal = o.products.reduce((acc, p) => {
+                const priceAfterDiscount = p.price * (1 - p.discountPercentage / 100);
+                return acc + priceAfterDiscount * p.quantity;
+            }, 0);
 
-        return {
-            id: o._id.toString(),
-            customer: o.userInfo ? o.userInfo.fullName : "Không có",
-            total: orderTotal,
-            status: o.status,
-            time: o.createdAt
-        };
-    });
-
+            return {
+                id: o._id.toString(),
+                customer: o.userInfo ? o.userInfo.fullName : "Không có",
+                total: orderTotal,
+                status: o.status,
+                time: o.createdAt
+            };
+        });
 
     io.emit("newOrder", {
         totalOrders,
@@ -143,11 +145,11 @@ module.exports.success = async (req, res) => {
         latestOrders
     });
 
-    // Render trang thành công
     res.render("client/pages/checkout/success", {
         pageTitle: "Đặt hàng thành công",
-        order: order
+        order
     });
 };
+
 
 

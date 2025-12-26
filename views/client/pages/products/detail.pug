@@ -31,6 +31,9 @@ block main
                     
                     if(product.stock)
                         div(class="inner-stock") Còn lại <span> #{product.stock} </span> sản phẩm
+                    else 
+                        div
+                            span(class="btn btn-danger mb-3") Hết hàng
 
                     form(
                         action=`/cart/add/${product.id}`
@@ -44,10 +47,11 @@ block main
                             min=1
                             max=product.stock
                         )
-                        button(
-                            type="submit"
-                            class="btn btn-success btn-block"
-                        ) Thêm vào giỏ hàng
+                        if(product.stock > 0)
+                            button(
+                                type="submit"
+                                class="btn btn-success btn-block"
+                            ) Thêm vào giỏ hàng
             hr
             .container.my-5 
                 .row 
